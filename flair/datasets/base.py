@@ -204,7 +204,7 @@ class MongoDataset(FlairDataset):
                 sentence = self._parse_document_to_sentence(
                     document[self.text],
                     [document[_] if _ in document else "" for _ in self.categories],
-                    tokenizer,
+                    tokenizer
                 )
                 if sentence is not None and len(sentence.tokens) > 0:
                     self.sentences.append(sentence)
@@ -220,12 +220,11 @@ class MongoDataset(FlairDataset):
             text = text[: self.max_chars_per_doc]
 
         if text and labels:
-            sentence = Sentence(text, labels=labels, use_tokenizer=tokenizer)
-
+            sentence = Sentence(text, use_tokenizer=tokenizer)
+            if labels:
+                _ = [sentence.add_label(_1, _2) for _1, _2 in zip(self.categories, labels)]
             if self.max_tokens_per_doc > 0:
-                sentence.tokens = sentence.tokens[
-                                  : min(len(sentence), self.max_tokens_per_doc)
-                                  ]
+                sentence.tokens = sentence.tokens[:min(len(sentence), self.max_tokens_per_doc)]
 
             return sentence
         return None
