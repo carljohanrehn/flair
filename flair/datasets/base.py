@@ -221,8 +221,9 @@ class MongoDataset(FlairDataset):
 
         if text and labels:
             sentence = Sentence(text, use_tokenizer=tokenizer)
-            if labels:
-                _ = [sentence.add_label(_1, _2) for _1, _2 in zip(self.categories, labels)]
+
+            _ = [sentence.add_label(_1, _2) for _1, _2 in zip(self.categories, labels)]
+
             if self.max_tokens_per_doc > 0:
                 sentence.tokens = sentence.tokens[:min(len(sentence), self.max_tokens_per_doc)]
 
